@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\CatController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ShelterController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,5 +17,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::apiResource('cats', CatController::class);
-Route::apiResource('employees', CatController::class);
-Route::apiResource('shelters', CatController::class);
+Route::apiResource('employees', EmployeeController::class);
+Route::apiResource('shelters', ShelterController::class);
