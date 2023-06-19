@@ -40,3 +40,17 @@ test('shows a specific cat', function () {
             'id' => $catData->id,
         ]);
 });
+
+test('updates a cat', function () {
+    $catData = [
+        'name' => 'Old cat',
+        'age'  => 66,
+    ];
+
+    $response = $this->putJson('/api/cats/3', $catData);
+
+    $response->assertStatus(200)
+        ->assertJson($catData);
+
+    $this->assertDatabaseHas('cats',  array_merge($catData, ['id' => 3]));
+});
