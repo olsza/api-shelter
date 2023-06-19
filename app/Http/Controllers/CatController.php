@@ -22,7 +22,9 @@ class CatController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = Cat::create($request->all());
+
+        return response()->json($data, 201);
     }
 
     /**

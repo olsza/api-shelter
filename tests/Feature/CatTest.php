@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Cat;
 use Database\Seeders\CatSeeder;
 
 beforeEach(function () {
@@ -11,4 +12,20 @@ test('returns a list of cats', function () {
 
     $response->assertStatus(200)
         ->assertJsonCount(7);
+});
+
+test('creates a new cat', function () {
+    $catData = [
+        'name' => 'New cat name',
+        'age' => 5,
+    ];
+
+    $response = $this->postJson('/api/cats', $catData);
+
+    $response->assertStatus(201)
+        ->assertJsonFragment($catData);
+
+    $this->assertDatabaseHas('cats', $catData);
+
+    $this->expect(Cat::count())->toBe(8);
 });
