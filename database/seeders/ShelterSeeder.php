@@ -17,7 +17,7 @@ class ShelterSeeder extends Seeder
         ]);
     }
 
-    private function getUniqueName(): string
+    public function getUniqueName(): string
     {
         static $counter = 1;
 

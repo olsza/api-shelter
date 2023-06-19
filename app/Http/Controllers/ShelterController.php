@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Shelter;
 use Illuminate\Http\Request;
 
 class ShelterController extends Controller
@@ -11,7 +12,9 @@ class ShelterController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(
+            Shelter::all()
+        );
     }
 
     /**
@@ -19,7 +22,9 @@ class ShelterController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = Shelter::create($request->all());
+
+        return response()->json($data, 201);
     }
 
     /**
@@ -27,15 +32,20 @@ class ShelterController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $data = Shelter::find($id);
+
+        return response()->json($data, 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $data = Shelter::findOrFail($id);
+        $data->update($request->all());
+
+        return response()->json($data);
     }
 
     /**
@@ -43,6 +53,8 @@ class ShelterController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Shelter::destroy($id);
+
+        return response()->json(null, 204);
     }
 }
