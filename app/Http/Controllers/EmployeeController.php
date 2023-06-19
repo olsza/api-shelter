@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employee;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
@@ -11,7 +12,9 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(
+            Employee::all()
+        );
     }
 
     /**
@@ -19,7 +22,9 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = Employee::create($request->all());
+
+        return response()->json($data, 201);
     }
 
     /**
@@ -27,15 +32,20 @@ class EmployeeController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $data = Employee::find($id);
+
+        return response()->json($data, 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $data = Employee::findOrFail($id);
+        $data->update($request->all());
+
+        return response()->json($data);
     }
 
     /**
@@ -43,6 +53,8 @@ class EmployeeController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Employee::destroy($id);
+
+        return response()->json(null, 204);
     }
 }
