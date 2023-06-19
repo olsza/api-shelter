@@ -29,3 +29,14 @@ test('creates a new cat', function () {
 
     $this->expect(Cat::count())->toBe(8);
 });
+
+test('shows a specific cat', function () {
+    $catData = Cat::factory()->create();
+
+    $response = $this->getJson('/api/cats/' . $catData->id);
+
+    $response->assertStatus(200)
+        ->assertJson([
+            'id' => $catData->id,
+        ]);
+});

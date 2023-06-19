@@ -32,7 +32,9 @@ class CatController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $data = Cat::find($id);
+
+        return response()->json($data, 200);
     }
 
     /**
