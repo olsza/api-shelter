@@ -53,6 +53,8 @@ class CatController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Cat::destroy($id);
+
+        return response()->json(null, 204);
     }
 }

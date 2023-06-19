@@ -54,3 +54,13 @@ test('updates a cat', function () {
 
     $this->assertDatabaseHas('cats',  array_merge($catData, ['id' => 3]));
 });
+
+test('deletes a cat', function () {
+    $response = $this->deleteJson('/api/cats/4');
+
+    $response->assertStatus(204);
+
+    $this->assertDatabaseMissing('cats', ['id' => 4]);
+
+    $this->expect(Cat::count())->toBe(6);
+});
