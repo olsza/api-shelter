@@ -15,3 +15,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::apiResource('cats', CatController::class);
+Route::apiResource('employees', CatController::class);
