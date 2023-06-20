@@ -25,8 +25,8 @@ test('shows a specific shelter', function () {
 
 test('creates a new shelter branch', function () {
     $shelterData = [
-        'branch' => 'New shelter branch',
-        'address' => 5,
+        'branch'  => 'New shelter branch',
+        'address' => 'street 5',
     ];
 
     $response = $this->postJson('/api/shelters', $shelterData);
