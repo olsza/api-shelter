@@ -2,6 +2,7 @@
 
 use App\Models\Employee;
 use Database\Seeders\EmployeeSeeder;
+use Illuminate\Http\Response;
 
 beforeEach(function () {
     $this->seed(EmployeeSeeder::class);
@@ -63,4 +64,74 @@ test('deletes a employee', function () {
     $this->assertDatabaseMissing('employees', ['id' => 1]);
 
     $this->expect(Employee::count())->toBe(2);
+});
+
+test('validates the request data for creating a employee - name is required', function () {
+    $invalidData = [
+        'name' => '',
+    ];
+
+    $response = $this->postJson('/api/employees', $invalidData);
+
+    $response->assertStatus(Response::HTTP_BAD_REQUEST)
+        ->assertJsonValidationErrors(['name']);
+});
+
+test('validates the request data for creating a employee - phone is required', function () {
+    $invalidData = [
+        'name'  => 'Error employee',
+        'phone' => '',
+    ];
+
+    $response = $this->postJson('/api/employees', $invalidData);
+
+    $response->assertStatus(Response::HTTP_BAD_REQUEST)
+        ->assertJsonValidationErrors(['phone']);
+});
+
+test('validates the request data for creating a employee - phone is too long', function () {
+    $invalidData = [
+        'name'  => 'Error employee',
+        'phone' => '12345678901234567890123456',
+    ];
+
+    $response = $this->postJson('/api/employees', $invalidData);
+
+    $response->assertStatus(Response::HTTP_BAD_REQUEST)
+        ->assertJsonValidationErrors(['phone']);
+});
+
+test('validates the request data for update a employee - name is required', function () {
+    $invalidData = [
+        'name' => '',
+    ];
+
+    $response = $this->putJson('/api/employees/1', $invalidData);
+
+    $response->assertStatus(Response::HTTP_BAD_REQUEST)
+        ->assertJsonValidationErrors(['name']);
+});
+
+test('validates the request data for update a employee - phone is required', function () {
+    $invalidData = [
+        'name'  => 'update employee',
+        'phone' => '',
+    ];
+
+    $response = $this->putJson('/api/employees/1', $invalidData);
+
+    $response->assertStatus(Response::HTTP_BAD_REQUEST)
+        ->assertJsonValidationErrors(['phone']);
+});
+
+test('validates the request data for update a employee - phone is too long', function () {
+    $invalidData = [
+        'name'  => 'update employee',
+        'phone' => '12345678901234567890123456',
+    ];
+
+    $response = $this->putJson('/api/employees/1', $invalidData);
+
+    $response->assertStatus(Response::HTTP_BAD_REQUEST)
+        ->assertJsonValidationErrors(['phone']);
 });
