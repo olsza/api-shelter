@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Trait;
 
-use Illuminate\Http\Request;
-
 trait ApiResourceTrait
 {
     /**
@@ -17,16 +15,6 @@ trait ApiResourceTrait
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $data = $this->modelName::create($request->all());
-
-        return response()->json($data, 201);
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show(string $id)
@@ -36,16 +24,6 @@ trait ApiResourceTrait
         return response()->json($data, 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        $data = $this->modelName::findOrFail($id);
-        $data->update($request->all());
-
-        return response()->json($data);
-    }
 
     /**
      * Remove the specified resource from storage.
