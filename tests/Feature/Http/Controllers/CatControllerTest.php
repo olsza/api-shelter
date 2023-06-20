@@ -2,6 +2,7 @@
 
 use App\Models\Cat;
 use Database\Seeders\CatSeeder;
+use Illuminate\Http\Response;
 
 beforeEach(function () {
     $this->seed(CatSeeder::class);
@@ -63,4 +64,98 @@ test('deletes a cat', function () {
     $this->assertDatabaseMissing('cats', ['id' => 4]);
 
     $this->expect(Cat::count())->toBe(6);
+});
+
+test('validates the request data for creating a cat - name is required', function () {
+    $invalidData = [
+        'name' => '',
+    ];
+
+    $response = $this->postJson('/api/cats', $invalidData);
+
+    $response->assertStatus(Response::HTTP_BAD_REQUEST)
+        ->assertJsonValidationErrors(['name']);
+});
+
+test('validates the request data for creating a cat - age is invalid', function () {
+    $invalidData = [
+        'name' => 'Error cat',
+        'age'  => 'invalid',
+    ];
+
+    $response = $this->postJson('/api/cats', $invalidData);
+
+    $response->assertStatus(Response::HTTP_BAD_REQUEST)
+        ->assertJsonValidationErrors(['age']);
+});
+
+test('validates the request data for creating a cat - age is too great', function () {
+    $invalidData = [
+        'name' => 'Error cat',
+        'age'  => 100,
+    ];
+
+    $response = $this->postJson('/api/cats', $invalidData);
+
+    $response->assertStatus(Response::HTTP_BAD_REQUEST)
+        ->assertJsonValidationErrors(['age']);
+});
+
+test('validates the request data for creating a cat - age is too small', function () {
+    $invalidData = [
+        'name' => 'Error cat',
+        'age'  => 0,
+    ];
+
+    $response = $this->postJson('/api/cats', $invalidData);
+
+    $response->assertStatus(Response::HTTP_BAD_REQUEST)
+        ->assertJsonValidationErrors(['age']);
+});
+
+test('validates the request data for update a cat - name is required', function () {
+    $invalidData = [
+        'name' => '',
+    ];
+
+    $response = $this->putJson('/api/cats/1', $invalidData);
+
+    $response->assertStatus(Response::HTTP_BAD_REQUEST)
+        ->assertJsonValidationErrors(['name']);
+});
+
+test('validates the request data for update a cat - age is invalid', function () {
+    $invalidData = [
+        'name' => 'update Error cat',
+        'age'  => 'invalid',
+    ];
+
+    $response = $this->putJson('/api/cats/1', $invalidData);
+
+    $response->assertStatus(Response::HTTP_BAD_REQUEST)
+        ->assertJsonValidationErrors(['age']);
+});
+
+test('validates the request data for update a cat - age is too great', function () {
+    $invalidData = [
+        'name' => 'update Error cat',
+        'age'  => 100,
+    ];
+
+    $response = $this->putJson('/api/cats/1', $invalidData);
+
+    $response->assertStatus(Response::HTTP_BAD_REQUEST)
+        ->assertJsonValidationErrors(['age']);
+});
+
+test('validates the request data for update a cat - age is too small', function () {
+    $invalidData = [
+        'name' => 'update Error cat',
+        'age'  => 0,
+    ];
+
+    $response = $this->putJson('/api/cats/1', $invalidData);
+
+    $response->assertStatus(Response::HTTP_BAD_REQUEST)
+        ->assertJsonValidationErrors(['age']);
 });
