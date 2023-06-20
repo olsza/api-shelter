@@ -2,6 +2,7 @@
 
 use App\Models\Shelter;
 use Database\Seeders\ShelterSeeder;
+use Illuminate\Http\Response;
 
 beforeEach(function () {
     $this->seed(ShelterSeeder::class);
@@ -61,4 +62,28 @@ test('deletes a shelter', function () {
     $this->assertDatabaseMissing('shelters', ['id' => 2]);
 
     $this->expect(Shelter::count())->toBe(1);
+});
+
+test('validates the request data for creating a shelter - branch & address is required', function () {
+    $invalidData = [
+        'branch'  => '',
+        'address' => '',
+    ];
+
+    $response = $this->postJson('/api/shelters', $invalidData);
+
+    $response->assertStatus(Response::HTTP_BAD_REQUEST)
+        ->assertJsonValidationErrors(['branch', 'address']);
+});
+
+test('validates the request data for update a shelter - branch & address is required', function () {
+    $invalidData = [
+        'branch'  => '',
+        'address' => '',
+    ];
+
+    $response = $this->putJson('/api/shelters/1', $invalidData);
+
+    $response->assertStatus(Response::HTTP_BAD_REQUEST)
+        ->assertJsonValidationErrors(['branch', 'address']);
 });
